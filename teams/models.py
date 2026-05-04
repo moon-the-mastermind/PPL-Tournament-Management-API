@@ -1,8 +1,9 @@
 import uuid
 from django.db import models
 from django.conf import settings
+from authsystem.models import TimeStampedModel
 
-class Team(models.Model):
+class Team(TimeStampedModel):
     name = models.CharField(max_length=100, unique=True)
     # Admin manual-vabe captain assign korbe, tai null=True rakha hoyeche
     captain = models.ForeignKey(
@@ -19,7 +20,7 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
-class Invitation(models.Model):
+class Invitation(TimeStampedModel):
     team = models.ForeignKey(
         Team, 
         on_delete=models.CASCADE, 

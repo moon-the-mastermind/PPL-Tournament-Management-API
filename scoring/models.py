@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
+from authsystem.models import TimeStampedModel
 
-class Ball(models.Model):
+class Ball(TimeStampedModel):
     # Proti ti boler details ekhane thakbe
     match = models.ForeignKey('matches.Match', on_delete=models.CASCADE, related_name='balls')
     innings = models.PositiveIntegerField(choices=((1, 'Innings 1'), (2, 'Innings 2')))
@@ -34,7 +35,7 @@ class Ball(models.Model):
     def __str__(self):
         return f"Match {self.match.id} - {self.over}.{self.ball_num}"
 
-class MatchState(models.Model):
+class MatchState(TimeStampedModel):
     # Live status for WebSockets
     match = models.OneToOneField('matches.Match', on_delete=models.CASCADE, related_name='live_state')
     
@@ -52,7 +53,7 @@ class MatchState(models.Model):
     def __str__(self):
         return f"Live State: {self.match}"
 
-class BattingStats(models.Model):
+class BattingStats(TimeStampedModel):
     match = models.ForeignKey('matches.Match', on_delete=models.CASCADE, related_name='batting_stats')
     player = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.CASCADE, related_name='career_batting')
     
@@ -65,7 +66,7 @@ class BattingStats(models.Model):
     def __str__(self):
         return f"{self.player.full_name} - {self.runs}({self.balls})"
 
-class BowlingStats(models.Model):
+class BowlingStats(TimeStampedModel):
     match = models.ForeignKey('matches.Match', on_delete=models.CASCADE, related_name='bowling_stats')
     player = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.CASCADE, related_name='career_bowling')
     

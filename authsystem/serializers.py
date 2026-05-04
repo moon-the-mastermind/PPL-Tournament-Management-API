@@ -35,6 +35,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlayerProfile
         fields = "__all__"
+        read_only_fields = ['team']
 
     def update(self, instance, validated_data):
         instance.full_name = validated_data.get("full_name", instance.full_name)

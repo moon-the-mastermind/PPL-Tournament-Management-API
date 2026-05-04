@@ -3,7 +3,15 @@ from django.contrib.auth.models import AbstractUser
 # from teams.models import Team
 
 
-class User(AbstractUser):
+
+class TimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null = True, blank = True)
+    updated_at = models.DateTimeField(auto_now=True, null = True, blank = True)
+
+    class Meta:
+        abstract = True
+
+class User(AbstractUser, TimeStampedModel):
 
     ROLE_CHOICES = (
         ('admin', 'Admin'),
@@ -19,7 +27,7 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username}-({self.role})"
 
-class PlayerProfile(models.Model):
+class PlayerProfile(TimeStampedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     # ForeignKey to Team (which will be in teams app)
     # We use a string 'teams.Team' to avoid circular import

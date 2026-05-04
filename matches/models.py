@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
+from authsystem.models import TimeStampedModel
 
-class Tournament(models.Model):
+class Tournament(TimeStampedModel):
     name = models.CharField(max_length=200)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -10,7 +11,7 @@ class Tournament(models.Model):
     def __str__(self):
         return self.name
 
-class Match(models.Model):
+class Match(TimeStampedModel):
     STATUS_CHOICES = (
         ('upcoming', 'Upcoming'),
         ('live', 'Live'),
@@ -64,7 +65,7 @@ class Match(models.Model):
     def __str__(self):
         return f"{self.team1.name} vs {self.team2.name} - {self.tournament.name}"
 
-class PlayingXI(models.Model):
+class PlayingXI(TimeStampedModel):
     match = models.ForeignKey(
         Match, 
         on_delete=models.CASCADE, 
