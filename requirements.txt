@@ -1,0 +1,13 @@
+django
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+channels
+channels-redis
+daphne
+psycopg2-binary
+pillow
+uvicorn
+#for google login
+django-allauth
+requests
