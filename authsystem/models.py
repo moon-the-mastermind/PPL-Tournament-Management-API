@@ -1,23 +1,26 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from teams.models import Team
+# from teams.models import Team
 
 
 class User(AbstractUser):
 
     ROLE_CHOICES = (
         ('admin', 'Admin'),
+        ('scorer', 'Scorer'),
         ('captain', 'Captain'),
         ('player', 'Player'),
         ('viewer', 'Viewer'),
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='viewer')
     email = models.EmailField(unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ["username"]
     def __str__(self):
         return f"{self.username}-({self.role})"
 
 class PlayerProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='player_profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     # ForeignKey to Team (which will be in teams app)
     # We use a string 'teams.Team' to avoid circular import
     team = models.ForeignKey('teams.Team', on_delete=models.SET_NULL, null=True, blank=True, related_name='players')
@@ -36,5 +39,5 @@ class PlayerProfile(models.Model):
     image = models.ImageField(upload_to='players/', null=True, blank=True)
 
     def __str__(self):
-        return f"{self.name}-{self.role}"
+        return f"{self.full_name}-{self.role}"
     

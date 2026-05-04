@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Pipenv (এটি গিটে রাখা উচিত নয়, কারণ অন্য কেউ আপনার Pipfile দিয়ে এনভায়রনমেন্ট তৈরি করবে)
+# তবে Pipfile এবং Pipfile.lock অবশ্যই গিটে পুশ করতে হবে।
+.virtualenv/
+
+# Database (Local development database)
+db.sqlite3
+
+# Media and Static
+/media/
+/static/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

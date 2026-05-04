@@ -3,3 +3,5 @@ from.models import User, PlayerProfile
 
 admin.site.register(User)
 admin.site.register(PlayerProfile)
+
+
