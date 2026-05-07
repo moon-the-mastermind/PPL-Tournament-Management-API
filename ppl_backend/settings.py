@@ -47,9 +47,12 @@ INSTALLED_APPS = [
 
     #for api documentation
     "drf_yasg",
+    #filter
+    "django_filters",
 ]
 
 MIDDLEWARE = [
+    'authsystem.middleware.AppendSlashWithoutRedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -169,3 +172,5 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+APPEND_SLASH = True

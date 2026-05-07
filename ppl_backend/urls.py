@@ -31,4 +31,5 @@ urlpatterns = [
 
     #for app url
     path("api/auth/", include("authsystem.urls")),   
+    path("api/teams/", include("teams.urls")),
 ]

@@ -76,9 +76,9 @@ class PlayingXI(TimeStampedModel):
         on_delete=models.CASCADE, 
         related_name='match_participations'
     )
-    # authsystem app-er PlayerProfile model k ekhane link kora hoyeche
+    # authsystem app-er UserProfile model k ekhane link kora hoyeche
     player = models.ForeignKey(
-        'authsystem.PlayerProfile', 
+        'authsystem.UserProfile', 
         on_delete=models.CASCADE, 
         related_name='matches_played'
     )

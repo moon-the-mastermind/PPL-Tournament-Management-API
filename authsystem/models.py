@@ -24,28 +24,24 @@ class User(AbstractUser, TimeStampedModel):
     email = models.EmailField(unique=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ["username"]
+
+    def save(self, *args, **kwargs):
+        if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt', 'argon2')):
+            self.set_password(self.password)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.username}-({self.role})"
 
-class PlayerProfile(TimeStampedModel):
+class UserProfile(TimeStampedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    # ForeignKey to Team (which will be in teams app)
-    # We use a string 'teams.Team' to avoid circular import
-    team = models.ForeignKey('teams.Team', on_delete=models.SET_NULL, null=True, blank=True, related_name='players')
-    
-    # Personal Data
     full_name = models.CharField(max_length=100)
-    jersey_number = models.PositiveIntegerField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
-    
-    # Career Data
-    role = models.CharField(max_length=50, null=True, blank=True)
-    batting_style = models.CharField(max_length=50, null=True, blank=True)
-    bowling_style = models.CharField(max_length=50, null=True, blank=True)
+    ssc_batch = models.CharField(max_length=4, blank=True, null=True) # Example: 2012
     image = models.ImageField(upload_to='players/', null=True, blank=True)
-
+    bio = models.TextField(null= True, blank=True)
     def __str__(self):
-        return f"{self.full_name}-{self.role}"
+        return f"{self.full_name}"
     

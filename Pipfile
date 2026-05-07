@@ -17,6 +17,7 @@ uvicorn = "*"
 django-allauth = "*"
 requests = "*"
 drf-yasg = "*"
+django-filter = "*"
 
 [dev-packages]
 

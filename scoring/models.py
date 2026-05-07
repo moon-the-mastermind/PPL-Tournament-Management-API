@@ -9,9 +9,9 @@ class Ball(TimeStampedModel):
     over = models.PositiveIntegerField() # 0 to 19
     ball_num = models.PositiveIntegerField() # 1 to 6
     
-    batsman = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.CASCADE, related_name='balls_faced')
-    non_striker = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.CASCADE, related_name='partner_balls')
-    bowler = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.CASCADE, related_name='balls_bowled')
+    batsman = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='balls_faced')
+    non_striker = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='partner_balls')
+    bowler = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='balls_bowled')
     
     runs = models.PositiveIntegerField(default=0) # Runs from bat
     EXTRAS_CHOICES = (
@@ -40,9 +40,9 @@ class MatchState(TimeStampedModel):
     match = models.OneToOneField('matches.Match', on_delete=models.CASCADE, related_name='live_state')
     
     current_innings = models.PositiveIntegerField(default=1)
-    striker = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.SET_NULL, null=True, related_name='current_striking')
-    non_striker = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.SET_NULL, null=True, related_name='current_non_striking')
-    current_bowler = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.SET_NULL, null=True, related_name='current_bowling')
+    striker = models.ForeignKey('authsystem.UserProfile', on_delete=models.SET_NULL, null=True, related_name='current_striking')
+    non_striker = models.ForeignKey('authsystem.UserProfile', on_delete=models.SET_NULL, null=True, related_name='current_non_striking')
+    current_bowler = models.ForeignKey('authsystem.UserProfile', on_delete=models.SET_NULL, null=True, related_name='current_bowling')
     
     total_runs = models.PositiveIntegerField(default=0)
     total_wickets = models.PositiveIntegerField(default=0)
@@ -55,7 +55,7 @@ class MatchState(TimeStampedModel):
 
 class BattingStats(TimeStampedModel):
     match = models.ForeignKey('matches.Match', on_delete=models.CASCADE, related_name='batting_stats')
-    player = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.CASCADE, related_name='career_batting')
+    player = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='career_batting')
     
     runs = models.PositiveIntegerField(default=0)
     balls = models.PositiveIntegerField(default=0)
@@ -68,7 +68,7 @@ class BattingStats(TimeStampedModel):
 
 class BowlingStats(TimeStampedModel):
     match = models.ForeignKey('matches.Match', on_delete=models.CASCADE, related_name='bowling_stats')
-    player = models.ForeignKey('authsystem.PlayerProfile', on_delete=models.CASCADE, related_name='career_bowling')
+    player = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='career_bowling')
     
     overs = models.DecimalField(max_digits=4, decimal_places=1, default=0.0) # e.g., 3.4
     runs_conceded = models.PositiveIntegerField(default=0)

@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from django.contrib.auth import get_user_model
-from . serializers import RegistrationSerializer, UserSerializer, ProfileSerializer
+from . serializers import RegistrationSerializer, UserSerializer, PublicProfileSerializer, PrivateProfileSerializer
 from django.shortcuts import get_object_or_404
-from .models import PlayerProfile
+from .models import UserProfile
 
 
 def home(request):
@@ -35,13 +35,16 @@ class RegisterView(generics.CreateAPIView):
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UserProfileView(generics.RetrieveUpdateAPIView):
-    serializer_class = ProfileSerializer
+class MyProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = PrivateProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
+        return self.request.user.profile
 
-        # get object request.user k extract korche ebong prottek ta user k return kortese
-        return get_object_or_404(PlayerProfile, user=self.request.user)
+class PublicProfileView(generics.RetrieveAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = PublicProfileSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
 
-    
