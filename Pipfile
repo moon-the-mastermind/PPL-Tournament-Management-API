@@ -15,9 +15,9 @@ psycopg2-binary = "*"
 pillow = "*"
 uvicorn = "*"
 django-allauth = "*"
-requests = "*"
 drf-yasg = "*"
 django-filter = "*"
+requests = "*"
 
 [dev-packages]
 

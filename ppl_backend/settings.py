@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "teams",
     "matches",
     "scoring",
+    "payments",
 
     #for google login
     'django.contrib.sites',
@@ -174,3 +175,16 @@ SWAGGER_SETTINGS = {
 }
 
 APPEND_SLASH = True
+
+# ==============================================================================
+# SSLCOMMERZ CONFIGURATION (SANDBOX MODE)
+# ==============================================================================
+SSLCOMMERZ_STORE_ID = 'testbox'         # পাবলিক টেস্ট স্টোর আইডি
+SSLCOMMERZ_STORE_PASS = 'testbox@ssl'    # পাবলিক টেস্ট পাসওয়ার্ড
+SSLCOMMERZ_IS_SANDBOX = True            # টেস্ট মোডের জন্য True
+
+# পেমেন্ট শেষে SSLCommerz আমাদের সাইটের যে ইউআরএলগুলোতে ডাটা ব্যাক পাঠাবে
+# (কালকে আমরা এগুলো অনুযায়ী views এবং urls বানাবো)
+SSLCOMMERZ_SUCCESS_URL = 'http://127.0.0.1:8000/api/payments/success/'
+SSLCOMMERZ_FAIL_URL = 'http://127.0.0.1:8000/api/payments/fail/'
+SSLCOMMERZ_CANCEL_URL = 'http://127.0.0.1:8000/api/payments/cancel/'
