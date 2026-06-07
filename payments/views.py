@@ -28,6 +28,21 @@ class InitiatePaymentView(APIView):
                     "error" : "team_id and amount are required."
                 }, status=status.HTTP_400_BAD_REQUEST
             )
+        try:
+            amount = float(amount)
+            if amount <=0:
+                return Response({
+                        "error" : "Amount must be grater than 0."
+                    },
+                    status= status.HTTP_400_BAD_REQUEST
+                )
+        except ValueError:
+            return Response(
+                {
+                    "error" : "Amount must be a valid number."
+                },
+                status= status.HTTP_400_BAD_REQUEST
+            )
         
         try:
             team = Team.objects.get(id=team_id)

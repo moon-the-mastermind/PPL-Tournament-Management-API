@@ -45,6 +45,6 @@ class MyProfileView(generics.RetrieveUpdateAPIView):
 class PublicProfileView(generics.RetrieveAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = PublicProfileSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     lookup_field = 'id'
 
