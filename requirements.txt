@@ -11,3 +11,5 @@ uvicorn
 #for google login
 django-allauth
 requests
+#for .env
+python-decouple

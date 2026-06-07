@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(6pbr&bu_tcchdfz&g$r+r%x-r#v%9ft=r(x#p*rv9c2#*b#$z'
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default = False, cast = bool)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -127,6 +129,10 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR/'media'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
@@ -179,12 +185,11 @@ APPEND_SLASH = True
 # ==============================================================================
 # SSLCOMMERZ CONFIGURATION (SANDBOX MODE)
 # ==============================================================================
-SSLCOMMERZ_STORE_ID = 'testbox'         # পাবলিক টেস্ট স্টোর আইডি
-SSLCOMMERZ_STORE_PASS = 'testbox@ssl'    # পাবলিক টেস্ট পাসওয়ার্ড
-SSLCOMMERZ_IS_SANDBOX = True            # টেস্ট মোডের জন্য True
+SSLCOMMERZ_STORE_ID = 'moons69fe4685b05c0'
+SSLCOMMERZ_STORE_PASS = 'moons69fe4685b05c0@ssl'
+SSLCOMMERZ_IS_SANDBOX = True          # "true" for test mode
 
-# পেমেন্ট শেষে SSLCommerz আমাদের সাইটের যে ইউআরএলগুলোতে ডাটা ব্যাক পাঠাবে
-# (কালকে আমরা এগুলো অনুযায়ী views এবং urls বানাবো)
+#redirect url after payments
 SSLCOMMERZ_SUCCESS_URL = 'http://127.0.0.1:8000/api/payments/success/'
 SSLCOMMERZ_FAIL_URL = 'http://127.0.0.1:8000/api/payments/fail/'
 SSLCOMMERZ_CANCEL_URL = 'http://127.0.0.1:8000/api/payments/cancel/'

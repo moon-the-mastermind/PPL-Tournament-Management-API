@@ -18,6 +18,7 @@ django-allauth = "*"
 drf-yasg = "*"
 django-filter = "*"
 requests = "*"
+python-decouple = "*"
 
 [dev-packages]
 

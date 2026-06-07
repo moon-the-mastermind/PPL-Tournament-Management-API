@@ -14,7 +14,13 @@ class PaymentHistorySerializer(serializers.ModelSerializer):
             "created_at"
         ]
 
-        def get_paid_by_name(self, obj):
-            if object.paid_by:
+    def get_paid_by_name(self, obj):
+        
+        try:
+            if hasattr(obj, 'paid_by') and obj.paid_by:
+          
                 return obj.paid_by.get_full_name() or obj.paid_by.username
-            return "Guest"
+        except AttributeError:
+            pass
+            
+        return "Guest/Unknown"
