@@ -24,13 +24,13 @@ class Match(TimeStampedModel):
         related_name='matches'
     )
     team1 = models.ForeignKey(
-        'teams.Team', 
-        on_delete=models.CASCADE, 
+        'teams.Team',
+        on_delete=models.CASCADE,
         related_name='matches_as_team1'
     )
     team2 = models.ForeignKey(
-        'teams.Team', 
-        on_delete=models.CASCADE, 
+        'teams.Team',
+        on_delete=models.CASCADE,
         related_name='matches_as_team2'
     )
     
@@ -60,6 +60,7 @@ class Match(TimeStampedModel):
         blank=True, 
         related_name='batting_first_matches'
     )
+    winner = models.ForeignKey('teams.Team', on_delete=models.SET_NULL, null = True, blank = True, related_name="won_matches")
     banner = models.ImageField(upload_to='match_banners/', null=True, blank=True)
 
     def __str__(self):
