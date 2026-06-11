@@ -90,3 +90,28 @@ class PlayingXI(TimeStampedModel):
 
     def __str__(self):
         return f"{self.player.full_name} in {self.match}"
+    
+
+    class TournamentStanding(TimeStampedModel):
+        tournament = models.ForeignKey(
+            Tournament, 
+            on_delete=models.CASCADE,
+            related_name="standings"
+        )
+        team = models.ForeignKey(
+            "teams.Team",
+            on_delete= models.CASCADE,
+            related_name= "standings"
+        )
+        match_played = models.PositiveIntegerField(default=0)
+        won = models.PositiveIntegerField(default=0)
+        lost = models.PositiveIntegerField(default=0)
+        points = models.PositiveIntegerField(default=0)
+        nrr = models.FloatField(default=0.0) #Net Run Rate
+
+        class Meta:
+            unique_together = ("tournament", "team")
+            ordering = ["-points", "-nrr"]
+
+        def __str__(self):
+            return f"{self.team.name} - {self.tournament.name} - {self.points} pts."
