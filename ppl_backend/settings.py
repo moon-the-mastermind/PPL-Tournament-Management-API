@@ -52,9 +52,11 @@ INSTALLED_APPS = [
     "drf_yasg",
     #filter
     "django_filters",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # it must place at the top.
     'authsystem.middleware.AppendSlashWithoutRedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -193,3 +195,11 @@ SSLCOMMERZ_IS_SANDBOX = True          # "true" for test mode
 SSLCOMMERZ_SUCCESS_URL = 'http://127.0.0.1:8000/api/payments/success/'
 SSLCOMMERZ_FAIL_URL = 'http://127.0.0.1:8000/api/payments/fail/'
 SSLCOMMERZ_CANCEL_URL = 'http://127.0.0.1:8000/api/payments/cancel/'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",   # React default port
+    "http://localhost:5173",   # Vite default port
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+]
