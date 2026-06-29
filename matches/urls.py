@@ -9,6 +9,7 @@ from .views import (
     MatchStatusUpdateView,
     PlayingXIListCreateView,
     PlayingXIDetailView,
+    TournamentStandingView
 )
 
 urlpatterns = [
@@ -26,4 +27,5 @@ urlpatterns = [
     # PlayingXI
     path('playing-xi/', PlayingXIListCreateView.as_view(), name='playing_xi_list_create'),
     path('playing-xi/<int:id>/', PlayingXIDetailView.as_view(), name='playing_xi_detail'),
+    path("standings/<int:tournament_id>/", TournamentStandingView.as_view(), name = "tournament_standings"),
 ]

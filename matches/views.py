@@ -3,8 +3,8 @@ from rest_framework import generics, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .models import Tournament, Match, PlayingXI
-from .serializers import TournamentSerializers, MatchSerializer, PlayingXISerializer
+from .models import Tournament, Match, PlayingXI, TournamentStanding
+from .serializers import TournamentSerializers, MatchSerializer, PlayingXISerializer, TournamentStandingSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -179,3 +179,13 @@ class PlayingXIDetailView(generics.RetrieveDestroyAPIView):
     serializer_class = PlayingXISerializer
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "id"
+
+
+class TournamentStandingView(generics.ListAPIView):
+    serializer_class = TournamentStandingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        tournament_id = self.kwargs.get('tournament_id')
+        return TournamentStanding.objects.filter(tournament_id = tournament_id).select_related("team", "tournament")
+    

@@ -92,7 +92,8 @@ class PlayingXI(TimeStampedModel):
         return f"{self.player.full_name} in {self.match}"
     
 
-    class TournamentStanding(TimeStampedModel):
+
+class TournamentStanding(TimeStampedModel):
         tournament = models.ForeignKey(
             Tournament, 
             on_delete=models.CASCADE,
@@ -104,6 +105,7 @@ class PlayingXI(TimeStampedModel):
             related_name= "standings"
         )
         match_played = models.PositiveIntegerField(default=0)
+        
         won = models.PositiveIntegerField(default=0)
         lost = models.PositiveIntegerField(default=0)
         points = models.PositiveIntegerField(default=0)

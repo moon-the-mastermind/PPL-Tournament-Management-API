@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django import forms
-from .models import Tournament, Match, PlayingXI
+from .models import Tournament, Match, PlayingXI, TournamentStanding
 
 
 # ===============================================================
@@ -110,3 +110,8 @@ class PlayingXIAdmin(admin.ModelAdmin):
     form = PlayingXIAdminForm
     list_display = ('player', 'team', 'match')
     list_filter = ('team', 'match')
+
+@admin.register(TournamentStanding)
+class TournamentStandingAdmin(admin.ModelAdmin):
+    list_display = ('tournament', 'team', 'match_played', 'won', 'lost', 'points', 'nrr')
+    list_filter = ('tournament',)

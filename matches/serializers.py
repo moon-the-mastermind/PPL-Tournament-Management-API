@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import(
-    Tournament, Match, PlayingXI
+    Tournament, Match, PlayingXI, TournamentStanding
 )
 from teams.models import Team
 
@@ -10,13 +10,13 @@ class TournamentSerializers(serializers.ModelSerializer):
     class Meta:
         model = Tournament
         fields = [
-            "id", "name", "start_date", "end_date",
-            "is_active", "total_members", "created_at"
+            "id", "name", "start_date", "end_date","total_matches",
+            "is_active", "created_at"
         ]
         read_only_fields = ["id", "created_at"]
 
     def get_total_matches(self, obj):
-        return obj.metches.count()
+        return obj.matches.count()
 
 class MatchSerializer(serializers.ModelSerializer):
     tournament_name = serializers.ReadOnlyField(source = "tournament.name")
@@ -61,43 +61,57 @@ class PlayingXISerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at']
 
-        def get_match_name(self, obj):
-            return f"{obj.match.team1.name} V/S {obj.match.team2.name}"
-        
-        def validate(self, data):
-            match = data.get("match")
-            team = data.get("team")
-            player = data.get("player")
+    def get_match_name(self, obj):
+        return f"{obj.match.team1.name} V/S {obj.match.team2.name}"
+    
+    def validate(self, data):
+        match = data.get("match")
+        team = data.get("team")
+        player = data.get("player")
 
 
-            #check is the team is for this match
-            if team not in [match.team1, match.team2]:
-                raise serializers.ValidationError(
-                    {
-                        "team" : "This team is not exist in this match."
-                    }
-                )
-            
-            #check is the member exists in this team.
-            if not team.team_members.filter(player=player).exists():
-                raise serializers.ValidationError(
-                    {
-                        "player" : "this player is not assigned in this team."
-                    }
-                )
-            
-            #check and set playable member 8 or not
-            existing_count = PlayingXI.objects.filter(
-                match = match, team = team
-            ).count()
-            if existing_count >=8:
-                raise serializers.ValidationError(
-                    {
-                        "team" : "Only 8 players are allowed to play."
-                    }
-                )
-            return data
+        #check is the team is for this match
+        if team not in [match.team1, match.team2]:
+            raise serializers.ValidationError(
+                {
+                    "team" : "This team is not exist in this match."
+                }
+            )
         
+        #check is the member exists in this team.
+        if not team.team_members.filter(player=player).exists():
+            raise serializers.ValidationError(
+                {
+                    "player" : "this player is not assigned in this team."
+                }
+            )
+        
+        #check and set playable member 8 or not
+        existing_count = PlayingXI.objects.filter(
+            match = match, team = team
+        ).count()
+        if existing_count >=8:
+            raise serializers.ValidationError(
+                {
+                    "team" : "Only 8 players are allowed to play."
+                }
+            )
+        return data
+
+class TournamentStandingSerializer(serializers.ModelSerializer):
+    team_name = serializers.ReadOnlyField(source = "team.name")
+    team_logo = serializers.ImageField(source = "team.logo", read_only = True)
+    tournament_name = serializers.ReadOnlyField(source = "tournament.name")
+
+    class Meta:
+        model = TournamentStanding
+        fields = [
+            "id", "tournament", "tournament_name",
+            'team', 'team_name', 'team_logo',
+            'match_played', 'won', 'lost',
+            'points', 'nrr'
+        ]   
+        read_only_fields = ['id'] 
 
         
             
