@@ -221,15 +221,32 @@ class MatchStateView(generics.RetrieveAPIView):
     lookup_field = "match_id"
     
     def get_object(self):
-        match_id - self.kwargs.get("match_id")
-        return get_object_or_404(MatchState, match_id = match_id)
+        match_id = self.kwargs.get('match_id')
+        return get_object_or_404(MatchState, match_id=match_id)
+
     
 
+class BallHistoryView(generics.ListAPIView):
+    serializer_class = BallSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        match_id = self.kwargs.get('match_id')
+        return Ball.objects.filter(match_id=match_id)
 
 
 
+class ScorecardView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request, match_id):
+        batting = BattingStats.objects.filter(match_id=match_id).select_related('player', 'team')
+        bowling = BowlingStats.objects.filter(match_id=match_id).select_related('player', 'team')
 
+        return Response({
+            "batting": BattingStatsSerializer(batting, many=True).data,
+            "bowling": BowlingStatsSerializer(bowling, many=True).data
+        })
 
 
 
