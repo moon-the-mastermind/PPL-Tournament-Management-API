@@ -214,6 +214,15 @@ class BallEntryView(APIView):
         return playing_xi.team if playing_xi else None
 
 
+
+class MatchStateView(generics.RetrieveAPIView):
+    serializer_class = MatchStateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = "match_id"
+    
+    def get_object(self):
+        match_id - self.kwargs.get("match_id")
+        return get_object_or_404(MatchState, match_id = match_id)
     
 
 
