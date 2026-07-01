@@ -43,5 +43,5 @@ class UserProfile(TimeStampedModel):
     image = models.ImageField(upload_to='players/', null=True, blank=True)
     bio = models.TextField(null= True, blank=True)
     def __str__(self):
-        return f"{self.full_name}"
+        return f"{self.user.first_name} {self.user.last_name}"
     

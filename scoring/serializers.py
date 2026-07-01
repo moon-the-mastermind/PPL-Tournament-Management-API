@@ -74,6 +74,7 @@ class BallEntrySerializer(serializers.Serializer):
     out_player = serializers.IntegerField(required=False, allow_null=True)
     # over শেষে নতুন bowler আসবে কিনা
     new_bowler = serializers.IntegerField(required=False, allow_null=True)
+    new_batsman = serializers.IntegerField(required=False, allow_null=True) 
 
 
 class MatchStateSerializer(serializers.ModelSerializer):

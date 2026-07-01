@@ -65,7 +65,7 @@ class StartInningsView(APIView):
 class BallEntryView(APIView):
     permission_classes = [IsAdminOrScorer]
 
-    @transaction.automic
+    @transaction.atomic
     def post(self, request):
         serializer = BallEntrySerializer(data = request.data)
         
@@ -77,7 +77,12 @@ class BallEntryView(APIView):
         
         data = serializer.validated_data
         match = get_object_or_404(Match, id = data['match'])
-        match_state = get_object_or_404(MatchState, match= match)
+        match_state = get_object_or_404(
+        MatchState.objects.select_related(
+                'striker', 'non_striker', 'current_bowler'
+            ),
+            match=match
+        )
 
         if not match_state.is_active:
             return Response(
@@ -122,6 +127,7 @@ class BallEntryView(APIView):
             over = current_over,
             ball_num = ball_num_display if ball_num_display > 0 else 1,
             batsman = striker,
+            non_striker = non_striker,
             bowler = bowler,
             runs = runs,
             extra_type = extra_type,
@@ -184,6 +190,12 @@ class BallEntryView(APIView):
             out_batting_stats.is_out = True
             out_batting_stats.wicket_type = wicket_type
             out_batting_stats.save()
+
+            new_batsman_id = data.get("new_batsman")
+            if new_bowler_id:
+                match_state.striker_id = new_batsman_id
+            else:
+                match_state.striker_id = None
         
         #strike rotation
         if not is_wicket:

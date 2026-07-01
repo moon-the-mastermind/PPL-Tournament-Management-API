@@ -55,3 +55,5 @@ class TeamAdmin(admin.ModelAdmin):
             
             kwargs["queryset"] = User.objects.exclude(id__in=busy_captains)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
