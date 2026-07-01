@@ -36,7 +36,8 @@ class Match(TimeStampedModel):
     
     match_date = models.DateTimeField()
     venue = models.CharField(max_length=200)
-    total_overs = models.PositiveIntegerField(default=20)
+    total_overs = models.PositiveIntegerField(default=8)
+    max_wickets = models.PositiveIntegerField(default=7, null = True, blank= True)
     
     status = models.CharField(
         max_length=10, 

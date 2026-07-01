@@ -7,7 +7,6 @@ from .models import Tournament, Match, PlayingXI, TournamentStanding
 # ===============================================================
 # Match Admin Form — validation এখানে
 # ===============================================================
-
 class MatchAdminForm(forms.ModelForm):
     class Meta:
         model = Match
@@ -21,36 +20,46 @@ class MatchAdminForm(forms.ModelForm):
         batting_first = cleaned_data.get('batting_first')
         winner = cleaned_data.get('winner')
         status = cleaned_data.get('status')
-        
- 
+        total_overs = cleaned_data.get('total_overs')
+        max_wickets = cleaned_data.get('max_wickets')
 
-    
-
-        # team1 আর team2 একই হতে পারবে না
+        # team1 and team2 cannot be the same
         if team1 and team2 and team1 == team2:
-            self.add_error('team2', 'team1 আর team2 একই হতে পারবে না।')
+            self.add_error('team2', 'team1 and team2 cannot be the same.')
 
-        # toss_winner অবশ্যই match এর team হতে হবে
+        # toss_winner must be one of the match teams
         if toss_winner and team1 and team2:
             if toss_winner not in [team1, team2]:
-                self.add_error('toss_winner', 'Toss winner এই match এর team না।')
+                self.add_error('toss_winner', 'Toss winner must be one of the match teams.')
 
-        # batting_first অবশ্যই match এর team হতে হবে
+        # batting_first must be one of the match teams
         if batting_first and team1 and team2:
             if batting_first not in [team1, team2]:
-                self.add_error('batting_first', 'Batting first এই match এর team না।')
+                self.add_error('batting_first', 'Batting first must be one of the match teams.')
 
-        # winner অবশ্যই match এর team হতে হবে
+        # winner must be one of the match teams
         if winner and team1 and team2:
             if winner not in [team1, team2]:
-                self.add_error('winner', 'Winner এই match এর team না।')
+                self.add_error('winner', 'Winner must be one of the match teams.')
 
-        # finished status এ winner দিতেই হবে
+        # winner can only be set when match is finished
+        if winner and status != 'finished':
+            self.add_error('winner', 'Cannot set winner before the match is finished.')
+
+        # winner is required when match is finished
         if status == 'finished' and not winner:
-            self.add_error('winner', 'Match finished করতে winner দিতে হবে।')
-        
-        if winner and status != "finished":
-            self.add_error("winner", "Can't set winner before finished the match.")
+            self.add_error('winner', 'Winner is required to finish the match.')
+
+        # total_overs validation
+        if total_overs and total_overs < 1:
+            self.add_error('total_overs', 'Total overs must be at least 1.')
+
+        # max_wickets validation
+        if max_wickets and max_wickets < 1:
+            self.add_error('max_wickets', 'Max wickets must be at least 1.')
+
+        if max_wickets and max_wickets > 10:
+            self.add_error('max_wickets', 'Max wickets cannot be more than 10.')
 
         return cleaned_data
 
@@ -101,7 +110,7 @@ class TournamentAdmin(admin.ModelAdmin):
 class MatchAdmin(admin.ModelAdmin):
     form = MatchAdminForm
     
-    list_display = ('__str__', 'status', 'match_date', 'venue', 'winner')
+    list_display = ('__str__', 'status', 'match_date', 'venue', 'winner', 'total_overs', 'max_wickets')
     list_filter = ('status', 'tournament')
 
 

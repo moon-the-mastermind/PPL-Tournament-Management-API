@@ -3,42 +3,7 @@ from django.conf import settings
 from authsystem.models import TimeStampedModel
 
 
-class Ball(TimeStampedModel):
-    # Proti ti boler details ekhane thakbe
-    match = models.ForeignKey('matches.Match', on_delete=models.CASCADE, related_name='balls')
-    innings = models.PositiveIntegerField(choices=((1, 'Innings 1'), (2, 'Innings 2')))
-    over = models.PositiveIntegerField()  # 0 to 19
-    ball_num = models.PositiveIntegerField()  # 1 to 6
-
-    batsman = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='balls_faced')
-    non_striker = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='partner_balls')
-    bowler = models.ForeignKey('authsystem.UserProfile', on_delete=models.CASCADE, related_name='balls_bowled')
-
-    runs = models.PositiveIntegerField(default=0)  # Runs from bat
-    EXTRAS_CHOICES = (
-        ('none', 'None'),
-        ('wd', 'Wide'),
-        ('nb', 'No Ball'),
-        ('lb', 'Leg Bye'),
-        ('b', 'Bye'),
-    )
-    extra_type = models.CharField(max_length=10, choices=EXTRAS_CHOICES, default='none')
-    extra_runs = models.PositiveIntegerField(default=0)
-
-    is_wicket = models.BooleanField(default=False)
-    wicket_type = models.CharField(max_length=50, null=True, blank=True)  # Bowled, Catch, etc.
-
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['innings', 'over', 'ball_num']
-
-    def __str__(self):
-        return f"Match {self.match.id} - {self.over}.{self.ball_num}"
-
-
 class MatchState(TimeStampedModel):
-    # Live status for WebSockets
     match = models.OneToOneField('matches.Match', on_delete=models.CASCADE, related_name='live_state')
 
     current_innings = models.PositiveIntegerField(default=1)
@@ -48,18 +13,27 @@ class MatchState(TimeStampedModel):
 
     total_runs = models.PositiveIntegerField(default=0)
     total_wickets = models.PositiveIntegerField(default=0)
-    total_balls = models.PositiveIntegerField(default=0)  # To calculate current over
+    total_balls = models.PositiveIntegerField(default=0)
 
-    # 1st innings শেষ হলে score freeze করে রাখার জন্য
+    # Live RR — প্রতিটা ball এ auto update
+    current_rr = models.FloatField(default=0.0)             # ✅ একটাই field
+
+    # 1st innings final score (freeze হবে innings শেষে)
     innings1_runs = models.PositiveIntegerField(default=0)
     innings1_wickets = models.PositiveIntegerField(default=0)
     innings1_balls = models.PositiveIntegerField(default=0)
+    innings1_rr = models.FloatField(default=0.0)            # ✅ 1st innings final RR
 
-    is_active = models.BooleanField(default=True)  # Match cholche kina
+    # 2nd innings final score
+    innings2_runs = models.PositiveIntegerField(default=0)
+    innings2_wickets = models.PositiveIntegerField(default=0)
+    innings2_balls = models.PositiveIntegerField(default=0)
+    innings2_rr = models.FloatField(default=0.0)            # ✅ 2nd innings final RR
+
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Live State: {self.match}"
-
 
 class BattingStats(TimeStampedModel):
     match = models.ForeignKey('matches.Match', on_delete=models.CASCADE, related_name='batting_stats')
