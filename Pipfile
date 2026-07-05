@@ -7,8 +7,6 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
-channels = "*"
-channels-redis = "*"
 daphne = "*"
 psycopg2-binary = "*"
 pillow = "*"
@@ -19,6 +17,8 @@ django-filter = "*"
 requests = "*"
 python-decouple = "*"
 django-cors-headers = "*"
+channels = "*"  
+channels-redis = "*"
 
 [dev-packages]
 

@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     "scoring",
     "payments",
 
+    #live score update
+    "channels",
+
     #for google login
     'django.contrib.sites',
     'allauth',
@@ -203,3 +206,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
 ]
+
+ASGI_APPLICATION = 'ppl_backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    }
+}

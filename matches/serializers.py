@@ -106,11 +106,13 @@ class TournamentStandingSerializer(serializers.ModelSerializer):
     class Meta:
         model = TournamentStanding
         fields = [
-            "id", "tournament", "tournament_name",
+            'id', 'tournament', 'tournament_name',
             'team', 'team_name', 'team_logo',
             'match_played', 'won', 'lost',
-            'points', 'nrr'
-        ]   
+            'points', 'nrr',
+            'runs_scored', 'balls_faced',     
+            'runs_conceded', 'balls_bowled',    
+        ] 
         read_only_fields = ['id'] 
 
         

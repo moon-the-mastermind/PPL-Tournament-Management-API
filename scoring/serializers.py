@@ -93,7 +93,9 @@ class MatchStateSerializer(serializers.ModelSerializer):
             'current_bowler', 'bowler_name',
             'total_runs', 'total_wickets', 'total_balls',
             'current_over', 'current_over_balls',
-            'innings1_runs', 'innings1_wickets', 'innings1_balls',
+            'current_rr',                                   
+            'innings1_runs', 'innings1_wickets', 'innings1_balls', 'innings1_rr',
+            'innings2_runs', 'innings2_wickets', 'innings2_balls', 'innings2_rr',
             'is_active'
         ]
 
