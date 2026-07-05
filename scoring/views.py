@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status, generics, permissions
 from django.shortcuts import get_object_or_404
 from django.db import transaction
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from .models import(
     Ball, MatchState, BattingStats, BowlingStats, 
 )
@@ -272,6 +274,7 @@ class BallEntryView(APIView):
                 match.winner = winner
                 match.save()
 
+
                 return Response(
                     {
                         "message": "Match finished!",
@@ -299,6 +302,17 @@ class BallEntryView(APIView):
     def _get_player_team(self, player, match):
         playing_xi = PlayingXI.objects.filter(match=match, player=player).first()
         return playing_xi.team if playing_xi else None
+    
+    def _broadcast_match_team(self, match_state):
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"macth_{match_state.match_id}",
+            {
+                "type" : "match_update",
+                "data" : MatchStateSerializer(match_state).data
+            }
+        )
+
 
 class MatchStateView(generics.RetrieveAPIView):
     serializer_class = MatchStateSerializer
